@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono&display=swap" rel="stylesheet"> 
+
+  <!-- BG custom styling -->
+  <style type="text/css">
+
+  /* Better subtitle */
+  header .subtitle {
+      font-weight: bold;
+      font-size: 1.5em;
+  }
+
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      background-color: #f0f0f0;
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      background: #f0f0f0;
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+  }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="text-align:center"><span><a href="stdnoreturn.html">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="tgmath.html">Next</a></span></div><hr>
+<h1 data-number="25" id="stringref"><span class="header-section-number">25</span> <code>&lt;string.h&gt;</code> String Manipulation</h1>
+<p></p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="stringref.html#man-strchr"><code>memchr()</code></a></td>
+<td>Find the first occurrence of a character in memory.</td>
+</tr>
+<tr class="even">
+<td><a href="stringref.html#man-strcmp"><code>memcmp()</code></a></td>
+<td>Compare two regions of memory.</td>
+</tr>
+<tr class="odd">
+<td><a href="stringref.html#man-memcpy"><code>memcpy()</code></a></td>
+<td>Copy a region of memory to another.</td>
+</tr>
+<tr class="even">
+<td><a href="stringref.html#man-memcpy"><code>memmove()</code></a></td>
+<td>Move a (potentially overlapping) region of memory.</td>
+</tr>
+<tr class="odd">
+<td><a href="stringref.html#man-memset"><code>memset()</code></a></td>
+<td>Set a region of memory to a value.</td>
+</tr>
+<tr class="even">
+<td><a href="stringref.html#man-strcat"><code>strcat()</code></a></td>
+<td>Concatenate (join) two strings together.</td>
+</tr>
+<tr class="odd">
+<td><a href="stringref.html#man-strchr"><code>strchr()</code></a></td>
+<td>Find the first occurrence of a character in a string.</td>
+</tr>
+<tr class="even">
+<td><a href="stringref.html#man-strcmp"><code>strcmp()</code></a></td>
+<td>Compare two strings.</td>
+</tr>
+<tr class="odd">
+<td><a href="stringref.html#man-strcoll"><code>strcoll()</code></a></td>
+<td>Compare two strings accounting for locale.</td>
+</tr>
+<tr class="even">
+<td><a href="stringref.html#man-strcpy"><code>strcpy()</code></a></td>
+<td>Copy a string.</td>
+</tr>
+<tr class="odd">
+<td><a href="stringref.html#man-strspn"><code>strcspn()</code></a></td>
+<td>Find length of a string not consisting of a set of characters.</td>
+</tr>
+<tr class="even">
+<td><a href="stringref.html#man-strerror"><code>strerror()</code></a></td>
+<td>Return a human-readable error message for a given code.</td>
+</tr>
+<tr class="odd">
+<td><a href="stringref.html#man-strlen"><code>strlen()</code></a></td>
+<td>Return the length of a string.</td>
+</tr>
+<tr class="even">
+<td><a href="stringref.html#man-strcat"><code>strncat()</code></a></td>
+<td>Concatenate (join) two strings, length-limited.</td>
+</tr>
+<tr class="odd">
+<td><a href="stringref.html#man-strcmp"><code>strncmp()</code></a></td>
+<td>Compare two strings, length-limited.</td>
+</tr>
+<tr class="even">
+<td><a href="stringref.html#man-strcpy"><code>strncpy()</code></a></td>
+<td>Copy two strings, length-limited.</td>
+</tr>
+<tr class="odd">
+<td><a href="stringref.html#man-strpbrk"><code>strpbrk()</code></a></td>
+<td>Search a string for one of a set of character.</td>
+</tr>
+<tr class="even">
+<td><a href="stringref.html#man-strchr"><code>strrchr()</code></a></td>
+<td>Find the last occurrence of a character in a string.</td>
+</tr>
+<tr class="odd">
+<td><a href="stringref.html#man-strspn"><code>strspn()</code></a></td>
+<td>Find length of a string consisting of a set of characters.</td>
+</tr>
+<tr class="even">
+<td><a href="stringref.html#man-strstr"><code>strstr()</code></a></td>
+<td>Find a substring in a string.</td>
+</tr>
+<tr class="odd">
+<td><a href="stringref.html#man-strtok"><code>strtok()</code></a></td>
+<td>Tokenize a string.</td>
+</tr>
+<tr class="even">
+<td><a href="stringref.html#man-strxfrm"><code>strxfrm()</code></a></td>
+<td>Prepare a string for comparison as if by <code>strcoll()</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>As has been mentioned earlier in the guide, a string in C is a sequence of bytes in memory, terminated by a NUL character (‘<code>\0</code>’). The NUL at the end is important, since it lets all these string functions (and <code>printf()</code> and <code>puts()</code> and everything else that deals with a string) know where the end of the string actually is.</p>
+<p>Fortunately, when you operate on a string using one of these many functions available to you, they add the NUL terminator on for you, so you actually rarely have to keep track of it yourself. (Sometimes you do, especially if you’re building a string from scratch a character at a time or something.)</p>
+<p>In this section you’ll find functions for pulling substrings out of strings, concatenating strings together, getting the length of a string, and so forth and so on.</p>
+<hr />
+<h2 data-number="25.1" id="man-memcpy"><span class="header-section-number">25.1</span> <code>memcpy()</code>, <code>memmove()</code></h2>
+<p> </p>
+<p>Copy bytes of memory from one location to another</p>
+<h3 class="unnumbered unlisted" id="synopsis-184">Synopsis</h3>
+<div class="sourceCode" id="cb646"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb646-1"><a href="stringref.html#cb646-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb646-2"><a href="stringref.html#cb646-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb646-3"><a href="stringref.html#cb646-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>memcpy<span class="op">(</span><span class="dt">void</span> <span class="op">*</span> <span class="dt">restrict</span> s1<span class="op">,</span> <span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span> <span class="dt">restrict</span> s2<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">);</span></span>
+<span id="cb646-4"><a href="stringref.html#cb646-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb646-5"><a href="stringref.html#cb646-5" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>memmove<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>s1<span class="op">,</span> <span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>s2<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-184">Description</h3>
+<p>These functions copy memory—as many bytes as you want! From source to destination!</p>
+<p>The main difference between the two is that <code>memcpy()</code> cannot safely copy overlapping memory regions, whereas <code>memmove()</code> can.</p>
+<p>On the one hand, I’m not sure why you’d want to ever use <code>memcpy()</code> instead of <code>memmove()</code>, but I’ll bet it’s possibly more performant.</p>
+<p>The parameters are in a particular order: destination first, then source. I remember this order because it behaves like an “<code>=</code>” assignment: the destination is on the left.</p>
+<h3 class="unnumbered unlisted" id="return-value-182">Return Value</h3>
+<p>Both functions return whatever you passed in for parameter <code>s1</code> for your convenience.</p>
+<h3 class="unnumbered unlisted" id="example-185">Example</h3>
+<div class="sourceCode" id="cb647"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb647-1"><a href="stringref.html#cb647-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb647-2"><a href="stringref.html#cb647-2"></a></span>
+<span id="cb647-3"><a href="stringref.html#cb647-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb647-4"><a href="stringref.html#cb647-4"></a><span class="op">{</span></span>
+<span id="cb647-5"><a href="stringref.html#cb647-5"></a>    <span class="dt">char</span> s<span class="op">[</span><span class="dv">100</span><span class="op">]</span> <span class="op">=</span> <span class="st">&quot;Goats&quot;</span><span class="op">;</span></span>
+<span id="cb647-6"><a href="stringref.html#cb647-6"></a>    <span class="dt">char</span> t<span class="op">[</span><span class="dv">100</span><span class="op">];</span></span>
+<span id="cb647-7"><a href="stringref.html#cb647-7"></a></span>
+<span id="cb647-8"><a href="stringref.html#cb647-8"></a>    memcpy<span class="op">(</span>t<span class="op">,</span> s<span class="op">,</span> <span class="dv">6</span><span class="op">);</span>       <span class="co">// Copy non-overlapping memory</span></span>
+<span id="cb647-9"><a href="stringref.html#cb647-9"></a></span>
+<span id="cb647-10"><a href="stringref.html#cb647-10"></a>    memmove<span class="op">(</span>s <span class="op">+</span> <span class="dv">2</span><span class="op">,</span> s<span class="op">,</span> <span class="dv">6</span><span class="op">);</span>  <span class="co">// Copy overlapping memory</span></span>
+<span id="cb647-11"><a href="stringref.html#cb647-11"></a><span class="op">}</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-174">See Also</h3>
+<p><a href="stringref.html#man-strcpy"><code>strcpy()</code></a>, <a href="stringref.html#man-strcpy"><code>strncpy()</code></a></p>
+<hr />
+<h2 data-number="25.2" id="man-strcpy"><span class="header-section-number">25.2</span> <code>strcpy()</code>, <code>strncpy()</code></h2>
+<p> </p>
+<p>Copy a string</p>
+<h3 class="unnumbered unlisted" id="synopsis-185">Synopsis</h3>
+<div class="sourceCode" id="cb648"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb648-1"><a href="stringref.html#cb648-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb648-2"><a href="stringref.html#cb648-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb648-3"><a href="stringref.html#cb648-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>strcpy<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>dest<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>src<span class="op">);</span></span>
+<span id="cb648-4"><a href="stringref.html#cb648-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb648-5"><a href="stringref.html#cb648-5" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>strncpy<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>dest<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>src<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-185">Description</h3>
+<p>These functions copy a string from one address to another, stopping at the NUL terminator on the <code>src</code>string.</p>
+<p><code>strncpy()</code> is just like <code>strcpy()</code>, except only the first <code>n</code> characters are actually copied. Beware that if you hit the limit, <code>n</code> before you get a NUL terminator on the <code>src</code> string, your <code>dest</code> string won’t be NUL-terminated. Beware! BEWARE!</p>
+<p>(If the <code>src</code> string has fewer than <code>n</code> characters, it works just like <code>strcpy()</code>.)</p>
+<p>You can terminate the string yourself by sticking the <code>'\0'</code> in there yourself:</p>
+<div class="sourceCode" id="cb649"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb649-1"><a href="stringref.html#cb649-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> s<span class="op">[</span><span class="dv">10</span><span class="op">];</span></span>
+<span id="cb649-2"><a href="stringref.html#cb649-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> foo <span class="op">=</span> <span class="st">&quot;My hovercraft is full of eels.&quot;</span><span class="op">;</span> <span class="co">// more than 10 chars</span></span>
+<span id="cb649-3"><a href="stringref.html#cb649-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb649-4"><a href="stringref.html#cb649-4" aria-hidden="true" tabindex="-1"></a>strncpy<span class="op">(</span>s<span class="op">,</span> foo<span class="op">,</span> <span class="dv">9</span><span class="op">);</span> <span class="co">// only copy 9 chars into positions 0-8</span></span>
+<span id="cb649-5"><a href="stringref.html#cb649-5" aria-hidden="true" tabindex="-1"></a>s<span class="op">[</span><span class="dv">9</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;\0&#39;</span><span class="op">;</span>        <span class="co">// position 9 gets the terminator</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="return-value-183">Return Value</h3>
+<p>Both functions return <code>dest</code> for your convenience, at no extra charge.</p>
+<h3 class="unnumbered unlisted" id="example-186">Example</h3>
+<div class="sourceCode" id="cb650"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb650-1"><a href="stringref.html#cb650-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb650-2"><a href="stringref.html#cb650-2"></a></span>
+<span id="cb650-3"><a href="stringref.html#cb650-3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb650-4"><a href="stringref.html#cb650-4"></a><span class="op">{</span></span>
+<span id="cb650-5"><a href="stringref.html#cb650-5"></a>    <span class="dt">char</span> <span class="op">*</span>src <span class="op">=</span> <span class="st">&quot;hockey hockey hockey hockey hockey hockey hockey hockey&quot;</span><span class="op">;</span></span>
+<span id="cb650-6"><a href="stringref.html#cb650-6"></a>    <span class="dt">char</span> dest<span class="op">[</span><span class="dv">20</span><span class="op">];</span></span>
+<span id="cb650-7"><a href="stringref.html#cb650-7"></a></span>
+<span id="cb650-8"><a href="stringref.html#cb650-8"></a>    <span class="dt">int</span> len<span class="op">;</span></span>
+<span id="cb650-9"><a href="stringref.html#cb650-9"></a></span>
+<span id="cb650-10"><a href="stringref.html#cb650-10"></a>    strcpy<span class="op">(</span>dest<span class="op">,</span> <span class="st">&quot;I like &quot;</span><span class="op">);</span> <span class="co">// dest is now &quot;I like &quot;</span></span>
+<span id="cb650-11"><a href="stringref.html#cb650-11"></a></span>
+<span id="cb650-12"><a href="stringref.html#cb650-12"></a>    len <span class="op">=</span> strlen<span class="op">(</span>dest<span class="op">);</span></span>
+<span id="cb650-13"><a href="stringref.html#cb650-13"></a></span>
+<span id="cb650-14"><a href="stringref.html#cb650-14"></a>    <span class="co">// tricky, but let&#39;s use some pointer arithmetic and math to append</span></span>
+<span id="cb650-15"><a href="stringref.html#cb650-15"></a>    <span class="co">// as much of src as possible onto the end of dest, -1 on the length to</span></span>
+<span id="cb650-16"><a href="stringref.html#cb650-16"></a>    <span class="co">// leave room for the terminator:</span></span>
+<span id="cb650-17"><a href="stringref.html#cb650-17"></a>    strncpy<span class="op">(</span>dest<span class="op">+</span>len<span class="op">,</span> src<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>dest<span class="op">)-</span>len<span class="op">-</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb650-18"><a href="stringref.html#cb650-18"></a></span>
+<span id="cb650-19"><a href="stringref.html#cb650-19"></a>    <span class="co">// remember that sizeof() returns the size of the array in bytes</span></span>
+<span id="cb650-20"><a href="stringref.html#cb650-20"></a>    <span class="co">// and a char is a byte:</span></span>
+<span id="cb650-21"><a href="stringref.html#cb650-21"></a>    dest<span class="op">[</span><span class="kw">sizeof</span><span class="op">(</span>dest<span class="op">)-</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;\0&#39;</span><span class="op">;</span> <span class="co">// terminate</span></span>
+<span id="cb650-22"><a href="stringref.html#cb650-22"></a></span>
+<span id="cb650-23"><a href="stringref.html#cb650-23"></a>    <span class="co">// dest is now:       v null terminator</span></span>
+<span id="cb650-24"><a href="stringref.html#cb650-24"></a>    <span class="co">// I like hockey hocke </span></span>
+<span id="cb650-25"><a href="stringref.html#cb650-25"></a>    <span class="co">// 01234567890123456789012345</span></span>
+<span id="cb650-26"><a href="stringref.html#cb650-26"></a><span class="op">}</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-175">See Also</h3>
+<p><a href="stringref.html#man-memcpy"><code>memcpy()</code></a>, <a href="stringref.html#man-strcat"><code>strcat()</code></a>, <a href="stringref.html#man-strcat"><code>strncat()</code></a></p>
+<hr />
+<h2 data-number="25.3" id="man-strcat"><span class="header-section-number">25.3</span> <code>strcat()</code>, <code>strncat()</code></h2>
+<p> </p>
+<p>Concatenate two strings into a single string</p>
+<h3 class="unnumbered unlisted" id="synopsis-186">Synopsis</h3>
+<div class="sourceCode" id="cb651"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb651-1"><a href="stringref.html#cb651-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb651-2"><a href="stringref.html#cb651-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb651-3"><a href="stringref.html#cb651-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> strcat<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>dest<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>src<span class="op">);</span></span>
+<span id="cb651-4"><a href="stringref.html#cb651-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb651-5"><a href="stringref.html#cb651-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> strncat<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>dest<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>src<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-186">Description</h3>
+<p>“Concatenate”, for those not in the know, means to “stick together”. These functions take two strings, and stick them together, storing the result in the first string.</p>
+<p>These functions don’t take the size of the first string into account when it does the concatenation. What this means in practical terms is that you can try to stick a 2 megabyte string into a 10 byte space. This will lead to unintended consequences, unless you intended to lead to unintended consequences, in which case it will lead to intended unintended consequences.</p>
+<p>Technical banter aside, your boss and/or professor will be irate.</p>
+<p>If you want to make sure you don’t overrun the first string, be sure to check the lengths of the strings first and use some highly technical subtraction to make sure things fit.</p>
+<p>You can actually only concatenate the first <code>n</code> characters of the second string by using <code>strncat()</code> and specifying the maximum number of characters to copy.</p>
+<h3 class="unnumbered unlisted" id="return-value-184">Return Value</h3>
+<p>Both functions return a pointer to the destination string, like most of the string-oriented functions.</p>
+<h3 class="unnumbered unlisted" id="example-187">Example</h3>
+<div class="sourceCode" id="cb652"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb652-1"><a href="stringref.html#cb652-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb652-2"><a href="stringref.html#cb652-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb652-3"><a href="stringref.html#cb652-3"></a></span>
+<span id="cb652-4"><a href="stringref.html#cb652-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb652-5"><a href="stringref.html#cb652-5"></a><span class="op">{</span></span>
+<span id="cb652-6"><a href="stringref.html#cb652-6"></a>    <span class="dt">char</span> dest<span class="op">[</span><span class="dv">30</span><span class="op">]</span> <span class="op">=</span> <span class="st">&quot;Hello&quot;</span><span class="op">;</span></span>
+<span id="cb652-7"><a href="stringref.html#cb652-7"></a>    <span class="dt">char</span> <span class="op">*</span>src <span class="op">=</span> <span class="st">&quot;, World!&quot;</span><span class="op">;</span></span>
+<span id="cb652-8"><a href="stringref.html#cb652-8"></a>    <span class="dt">char</span> numbers<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;12345678&quot;</span><span class="op">;</span></span>
+<span id="cb652-9"><a href="stringref.html#cb652-9"></a></span>
+<span id="cb652-10"><a href="stringref.html#cb652-10"></a>    printf<span class="op">(</span><span class="st">&quot;dest before strcat: </span><span class="sc">\&quot;</span><span class="st">%s</span><span class="sc">\&quot;\n</span><span class="st">&quot;</span><span class="op">,</span> dest<span class="op">);</span> <span class="co">// &quot;Hello&quot;</span></span>
+<span id="cb652-11"><a href="stringref.html#cb652-11"></a></span>
+<span id="cb652-12"><a href="stringref.html#cb652-12"></a>    strcat<span class="op">(</span>dest<span class="op">,</span> src<span class="op">);</span></span>
+<span id="cb652-13"><a href="stringref.html#cb652-13"></a>    printf<span class="op">(</span><span class="st">&quot;dest after strcat:  </span><span class="sc">\&quot;</span><span class="st">%s</span><span class="sc">\&quot;\n</span><span class="st">&quot;</span><span class="op">,</span> dest<span class="op">);</span> <span class="co">// &quot;Hello, world!&quot;</span></span>
+<span id="cb652-14"><a href="stringref.html#cb652-14"></a></span>
+<span id="cb652-15"><a href="stringref.html#cb652-15"></a>    strncat<span class="op">(</span>dest<span class="op">,</span> numbers<span class="op">,</span> <span class="dv">3</span><span class="op">);</span> <span class="co">// strcat first 3 chars of numbers</span></span>
+<span id="cb652-16"><a href="stringref.html#cb652-16"></a>    printf<span class="op">(</span><span class="st">&quot;dest after strncat: </span><span class="sc">\&quot;</span><span class="st">%s</span><span class="sc">\&quot;\n</span><span class="st">&quot;</span><span class="op">,</span> dest<span class="op">);</span> <span class="co">// &quot;Hello, world!123&quot;</span></span>
+<span id="cb652-17"><a href="stringref.html#cb652-17"></a><span class="op">}</span></span></code></pre></div>
+<p>Notice I mixed and matched pointer and array notation there with <code>src</code> and <code>numbers</code>; this is just fine with string functions.</p>
+<h3 class="unnumbered unlisted" id="see-also-176">See Also</h3>
+<p><a href="stringref.html#man-strlen"><code>strlen()</code></a></p>
+<hr />
+<h2 data-number="25.4" id="man-strcmp"><span class="header-section-number">25.4</span> <code>strcmp()</code>, <code>strncmp()</code>, <code>memcmp()</code></h2>
+<p> </p>
+<p>Compare two strings or memory regions and return a difference</p>
+<h3 class="unnumbered unlisted" id="synopsis-187">Synopsis</h3>
+<div class="sourceCode" id="cb653"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb653-1"><a href="stringref.html#cb653-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb653-2"><a href="stringref.html#cb653-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb653-3"><a href="stringref.html#cb653-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> strcmp<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>s1<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>s2<span class="op">);</span></span>
+<span id="cb653-4"><a href="stringref.html#cb653-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb653-5"><a href="stringref.html#cb653-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> strncmp<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>s1<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>s2<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">);</span></span>
+<span id="cb653-6"><a href="stringref.html#cb653-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb653-7"><a href="stringref.html#cb653-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> memcmp<span class="op">(</span><span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>s1<span class="op">,</span> <span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>s2<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-187">Description</h3>
+<p>All these functions compare chunks of bytes in memory.</p>
+<p><code>strcmp()</code> and <code>strncmp()</code> operate on NUL-terminated strings, whereas <code>memcmp()</code> will compare the number of bytes you specify, brazenly ignoring any NUL characters it finds along the way.</p>
+<p><code>strcmp()</code> compares the entire string down to the end, while <code>strncmp()</code> only compares the first <code>n</code> characters of the strings.</p>
+<p>It’s a little funky what they return. Basically it’s a difference of the strings, so if the strings are the same, it’ll return zero (since the difference is zero). It’ll return non-zero if the strings differ; basically it will find the first mismatched character and return less-than zero if that character in <code>s1</code> is less than the corresponding character in <code>s2</code>. It’ll return greater-than zero if that character in <code>s1</code> is greater than that in <code>s2</code>.</p>
+<p>So if they return <code>0</code>, the comparison was equal (i.e. the difference was <code>0</code>.)</p>
+<p>These functions can be used as comparison functions for <a href="stdlib.html#man-qsort"><code>qsort()</code></a> if you have an array of <code>char*</code>s you want to sort.</p>
+<h3 class="unnumbered unlisted" id="return-value-185">Return Value</h3>
+<p>Returns zero if the strings or memory are the same, less-than zero if the first different character in <code>s1</code> is less than that in <code>s2</code>, or greater-than zero if the first difference character in <code>s1</code> is greater than than in <code>s2</code>.</p>
+<h3 class="unnumbered unlisted" id="example-188">Example</h3>
+<div class="sourceCode" id="cb654"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb654-1"><a href="stringref.html#cb654-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb654-2"><a href="stringref.html#cb654-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb654-3"><a href="stringref.html#cb654-3"></a></span>
+<span id="cb654-4"><a href="stringref.html#cb654-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb654-5"><a href="stringref.html#cb654-5"></a><span class="op">{</span></span>
+<span id="cb654-6"><a href="stringref.html#cb654-6"></a>    <span class="dt">char</span> <span class="op">*</span>s1 <span class="op">=</span> <span class="st">&quot;Muffin&quot;</span><span class="op">;</span></span>
+<span id="cb654-7"><a href="stringref.html#cb654-7"></a>    <span class="dt">char</span> <span class="op">*</span>s2 <span class="op">=</span> <span class="st">&quot;Muffin Sandwich&quot;</span><span class="op">;</span></span>
+<span id="cb654-8"><a href="stringref.html#cb654-8"></a>    <span class="dt">char</span> <span class="op">*</span>s3 <span class="op">=</span> <span class="st">&quot;Muffin&quot;</span><span class="op">;</span></span>
+<span id="cb654-9"><a href="stringref.html#cb654-9"></a></span>
+<span id="cb654-10"><a href="stringref.html#cb654-10"></a>    <span class="dt">int</span> r1 <span class="op">=</span> strcmp<span class="op">(</span><span class="st">&quot;Biscuits&quot;</span><span class="op">,</span> <span class="st">&quot;Kittens&quot;</span><span class="op">);</span></span>
+<span id="cb654-11"><a href="stringref.html#cb654-11"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> r1<span class="op">);</span> <span class="co">// prints &lt; 0 since &#39;B&#39; &lt; &#39;K&#39;</span></span>
+<span id="cb654-12"><a href="stringref.html#cb654-12"></a></span>
+<span id="cb654-13"><a href="stringref.html#cb654-13"></a>    <span class="dt">int</span> r2 <span class="op">=</span> strcmp<span class="op">(</span><span class="st">&quot;Kittens&quot;</span><span class="op">,</span> <span class="st">&quot;Biscuits&quot;</span><span class="op">);</span></span>
+<span id="cb654-14"><a href="stringref.html#cb654-14"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> r2<span class="op">);</span> <span class="co">// prints &gt; 0 since &#39;K&#39; &gt; &#39;B&#39;</span></span>
+<span id="cb654-15"><a href="stringref.html#cb654-15"></a></span>
+<span id="cb654-16"><a href="stringref.html#cb654-16"></a>    <span class="cf">if</span> <span class="op">(</span>strcmp<span class="op">(</span>s1<span class="op">,</span> s2<span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb654-17"><a href="stringref.html#cb654-17"></a>        printf<span class="op">(</span><span class="st">&quot;This won&#39;t get printed because the strings differ</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb654-18"><a href="stringref.html#cb654-18"></a></span>
+<span id="cb654-19"><a href="stringref.html#cb654-19"></a>    <span class="cf">if</span> <span class="op">(</span>strcmp<span class="op">(</span>s1<span class="op">,</span> s3<span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb654-20"><a href="stringref.html#cb654-20"></a>        printf<span class="op">(</span><span class="st">&quot;This will print because s1 and s3 are the same</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb654-21"><a href="stringref.html#cb654-21"></a></span>
+<span id="cb654-22"><a href="stringref.html#cb654-22"></a>    <span class="co">// this is a little weird...but if the strings are the same, it&#39;ll</span></span>
+<span id="cb654-23"><a href="stringref.html#cb654-23"></a>    <span class="co">// return zero, which can also be thought of as &quot;false&quot;. Not-false</span></span>
+<span id="cb654-24"><a href="stringref.html#cb654-24"></a>    <span class="co">// is &quot;true&quot;, so (!strcmp()) will be true if the strings are the</span></span>
+<span id="cb654-25"><a href="stringref.html#cb654-25"></a>    <span class="co">// same. yes, it&#39;s odd, but you see this all the time in the wild</span></span>
+<span id="cb654-26"><a href="stringref.html#cb654-26"></a>    <span class="co">// so you might as well get used to it:</span></span>
+<span id="cb654-27"><a href="stringref.html#cb654-27"></a></span>
+<span id="cb654-28"><a href="stringref.html#cb654-28"></a>    <span class="cf">if</span> <span class="op">(!</span>strcmp<span class="op">(</span>s1<span class="op">,</span> s3<span class="op">))</span></span>
+<span id="cb654-29"><a href="stringref.html#cb654-29"></a>        printf<span class="op">(</span><span class="st">&quot;The strings are the same!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb654-30"><a href="stringref.html#cb654-30"></a></span>
+<span id="cb654-31"><a href="stringref.html#cb654-31"></a>    <span class="cf">if</span> <span class="op">(!</span>strncmp<span class="op">(</span>s1<span class="op">,</span> s2<span class="op">,</span> <span class="dv">6</span><span class="op">))</span></span>
+<span id="cb654-32"><a href="stringref.html#cb654-32"></a>        printf<span class="op">(</span><span class="st">&quot;The first 6 characters of s1 and s2 are the same</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb654-33"><a href="stringref.html#cb654-33"></a><span class="op">}</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-177">See Also</h3>
+<p><a href="stringref.html#man-strcmp"><code>memcmp()</code></a>, <a href="stdlib.html#man-qsort"><code>qsort()</code></a></p>
+<hr />
+<h2 data-number="25.5" id="man-strcoll"><span class="header-section-number">25.5</span> <code>strcoll()</code></h2>
+<p></p>
+<p>Compare two strings accounting for locale</p>
+<h3 class="unnumbered unlisted" id="synopsis-188">Synopsis</h3>
+<div class="sourceCode" id="cb655"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb655-1"><a href="stringref.html#cb655-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb655-2"><a href="stringref.html#cb655-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb655-3"><a href="stringref.html#cb655-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> strcoll<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>s1<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>s2<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-188">Description</h3>
+<p>This is basically <code>strcmp()</code>, except that it handles accented characters better depending on the locale.</p>
+<p>For example, my <code>strcmp()</code> reports that the character “é” (with accent) is greater than “f”. But that’s hardly useful for alphabetizing.</p>
+<p>By setting the <code>LC_COLLATE</code> locale value (either by name or via <code>LC_ALL</code>), you can have <code>strcoll()</code> sort in a way that’s more meaningful by the current locale. For example, by having “é” appear sanely <em>before</em> “f”.</p>
+<p>It’s also a lot slower than <code>strcmp()</code> so use it only if you have to. See <a href="stringref.html#man-strxfrm"><code>strxfrm()</code></a> for a potential speedup.</p>
+<h3 class="unnumbered unlisted" id="return-value-186">Return Value</h3>
+<p>Like the other string comparison functions, <code>strcoll()</code> returns a negative value if <code>s1</code> is less than <code>s2</code>, or a positive value if <code>s1</code> is greater than <code>s2</code>. Or <code>0</code> if they are equal.</p>
+<h3 class="unnumbered unlisted" id="example-189">Example</h3>
+<div class="sourceCode" id="cb656"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb656-1"><a href="stringref.html#cb656-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb656-2"><a href="stringref.html#cb656-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb656-3"><a href="stringref.html#cb656-3"></a><span class="pp">#include </span><span class="im">&lt;locale.h&gt;</span></span>
+<span id="cb656-4"><a href="stringref.html#cb656-4"></a></span>
+<span id="cb656-5"><a href="stringref.html#cb656-5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb656-6"><a href="stringref.html#cb656-6"></a><span class="op">{</span></span>
+<span id="cb656-7"><a href="stringref.html#cb656-7"></a>    setlocale<span class="op">(</span>LC_ALL<span class="op">,</span> <span class="st">&quot;&quot;</span><span class="op">);</span></span>
+<span id="cb656-8"><a href="stringref.html#cb656-8"></a></span>
+<span id="cb656-9"><a href="stringref.html#cb656-9"></a>    <span class="co">// If your source character set doesn&#39;t support &quot;é&quot; in a string</span></span>
+<span id="cb656-10"><a href="stringref.html#cb656-10"></a>    <span class="co">// you can replace it with `\u00e9`, the Unicode code point</span></span>
+<span id="cb656-11"><a href="stringref.html#cb656-11"></a>    <span class="co">// for &quot;é&quot;.</span></span>
+<span id="cb656-12"><a href="stringref.html#cb656-12"></a></span>
+<span id="cb656-13"><a href="stringref.html#cb656-13"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strcmp<span class="op">(</span><span class="st">&quot;é&quot;</span><span class="op">,</span> <span class="st">&quot;f&quot;</span><span class="op">));</span>   <span class="co">// Reports é &gt; f, yuck.</span></span>
+<span id="cb656-14"><a href="stringref.html#cb656-14"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strcoll<span class="op">(</span><span class="st">&quot;é&quot;</span><span class="op">,</span> <span class="st">&quot;f&quot;</span><span class="op">));</span>  <span class="co">// Reports é &lt; f, yay!</span></span>
+<span id="cb656-15"><a href="stringref.html#cb656-15"></a><span class="op">}</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-178">See Also</h3>
+<p><a href="stringref.html#man-strcmp"><code>strcmp()</code></a></p>
+<hr />
+<h2 data-number="25.6" id="man-strxfrm"><span class="header-section-number">25.6</span> <code>strxfrm()</code></h2>
+<p></p>
+<p>Transform a string for comparing based on locale</p>
+<h3 class="unnumbered unlisted" id="synopsis-189">Synopsis</h3>
+<div class="sourceCode" id="cb657"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb657-1"><a href="stringref.html#cb657-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb657-2"><a href="stringref.html#cb657-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb657-3"><a href="stringref.html#cb657-3" aria-hidden="true" tabindex="-1"></a><span class="dt">size_t</span> strxfrm<span class="op">(</span><span class="dt">char</span> <span class="op">*</span> <span class="dt">restrict</span> s1<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span> <span class="dt">restrict</span> s2<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-189">Description</h3>
+<p>This is a strange little function, so bear with me.</p>
+<p>Firstly, if you haven’t done so, get familiar with <a href="stringref.html#man-strcoll"><code>strcoll()</code></a> because this is closely related to that.</p>
+<p>OK! Now that you’re back, you can think of <code>strxfrm()</code> as the first part of the <code>strcoll()</code> internals. Basically, <code>strcoll()</code> has to transform a string into a form that can be compared with <code>strcmp()</code>. And it does this with <code>strxfrm()</code> for both strings every time you call it.</p>
+<p><code>strxform()</code> takes string <code>s2</code> and transforms it (readies it for <code>strcmp()</code>) storing the result in <code>s1</code>. It writes no more than <code>n</code> bytes, protecting us from terrible buffer overflows.</p>
+<p>But hang on—there’s another mode! If you pass <code>NULL</code> for <code>s1</code> and <code>0</code> for <code>n</code>, it will return the number of bytes that the transformed string <em>would have</em> used<a href="footnotes.html#fn64" class="footnote-ref" id="fnref64" role="doc-noteref"><sup>64</sup></a>. This is useful if you need to allocate some space to hold the transformed string before you <code>strcmp()</code> it against another.</p>
+<p>What I’m getting at, not to be too blunt, is that <code>strcoll()</code> is slow compared to <code>strcmp()</code>. It does a lot of extra work running <code>strxfrm()</code> on all its strings.</p>
+<p>In fact, we can see how it works by writing our own like this:</p>
+<div class="sourceCode" id="cb658"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb658-1"><a href="stringref.html#cb658-1"></a><span class="dt">int</span> my_strcoll<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>s1<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>s2<span class="op">)</span></span>
+<span id="cb658-2"><a href="stringref.html#cb658-2"></a><span class="op">{</span></span>
+<span id="cb658-3"><a href="stringref.html#cb658-3"></a>    <span class="co">// Use n = 0 to just get the lengths of the transformed strings</span></span>
+<span id="cb658-4"><a href="stringref.html#cb658-4"></a>    <span class="dt">int</span> len1 <span class="op">=</span> strxfrm<span class="op">(</span>NULL<span class="op">,</span> s1<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb658-5"><a href="stringref.html#cb658-5"></a>    <span class="dt">int</span> len2 <span class="op">=</span> strxfrm<span class="op">(</span>NULL<span class="op">,</span> s2<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb658-6"><a href="stringref.html#cb658-6"></a></span>
+<span id="cb658-7"><a href="stringref.html#cb658-7"></a>    <span class="co">// Allocate enough room for each</span></span>
+<span id="cb658-8"><a href="stringref.html#cb658-8"></a>    <span class="dt">char</span> <span class="op">*</span>d1 <span class="op">=</span> malloc<span class="op">(</span>len1<span class="op">);</span></span>
+<span id="cb658-9"><a href="stringref.html#cb658-9"></a>    <span class="dt">char</span> <span class="op">*</span>d2 <span class="op">=</span> malloc<span class="op">(</span>len2<span class="op">);</span></span>
+<span id="cb658-10"><a href="stringref.html#cb658-10"></a></span>
+<span id="cb658-11"><a href="stringref.html#cb658-11"></a>    <span class="co">// Transform the strings for comparison</span></span>
+<span id="cb658-12"><a href="stringref.html#cb658-12"></a>    strxfrm<span class="op">(</span>d1<span class="op">,</span> s1<span class="op">,</span> len1<span class="op">);</span></span>
+<span id="cb658-13"><a href="stringref.html#cb658-13"></a>    strxfrm<span class="op">(</span>d2<span class="op">,</span> s2<span class="op">,</span> len2<span class="op">);</span></span>
+<span id="cb658-14"><a href="stringref.html#cb658-14"></a></span>
+<span id="cb658-15"><a href="stringref.html#cb658-15"></a>    <span class="co">// Compare the transformed strings</span></span>
+<span id="cb658-16"><a href="stringref.html#cb658-16"></a>    <span class="dt">int</span> result <span class="op">=</span> strcmp<span class="op">(</span>d1<span class="op">,</span> d2<span class="op">);</span></span>
+<span id="cb658-17"><a href="stringref.html#cb658-17"></a></span>
+<span id="cb658-18"><a href="stringref.html#cb658-18"></a>    <span class="co">// Free up the transformed strings</span></span>
+<span id="cb658-19"><a href="stringref.html#cb658-19"></a>    free<span class="op">(</span>d2<span class="op">);</span></span>
+<span id="cb658-20"><a href="stringref.html#cb658-20"></a>    free<span class="op">(</span>d1<span class="op">);</span></span>
+<span id="cb658-21"><a href="stringref.html#cb658-21"></a></span>
+<span id="cb658-22"><a href="stringref.html#cb658-22"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb658-23"><a href="stringref.html#cb658-23"></a><span class="op">}</span></span></code></pre></div>
+<p>You see on lines 12, 13, and 16, above how we transform the two input strings and then call <code>strcmp()</code> on the result.</p>
+<p>So why do we have this function? Can’t we just call <code>strcoll()</code> and be done with it?</p>
+<p>The idea is that if you have one string that you’re going to be comparing against a whole lot of other ones, maybe you just want to transform that string one time, then use the faster <code>strcmp()</code> saving yourself a bunch of the work we had to do in the function, above.</p>
+<p>We’ll do that in the example.</p>
+<h3 class="unnumbered unlisted" id="return-value-187">Return Value</h3>
+<p>Returns the number of bytes in the transformed sequence. If the value is greater than <code>n</code>, the results in <code>s1</code> are meaningless.</p>
+<h3 class="unnumbered unlisted" id="example-190">Example</h3>
+<div class="sourceCode" id="cb659"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb659-1"><a href="stringref.html#cb659-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb659-2"><a href="stringref.html#cb659-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb659-3"><a href="stringref.html#cb659-3"></a><span class="pp">#include </span><span class="im">&lt;locale.h&gt;</span></span>
+<span id="cb659-4"><a href="stringref.html#cb659-4"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb659-5"><a href="stringref.html#cb659-5"></a></span>
+<span id="cb659-6"><a href="stringref.html#cb659-6"></a><span class="co">// Transform a string for comparison, returning a malloc&#39;d</span></span>
+<span id="cb659-7"><a href="stringref.html#cb659-7"></a><span class="co">// result</span></span>
+<span id="cb659-8"><a href="stringref.html#cb659-8"></a><span class="dt">char</span> <span class="op">*</span>get_xfrm_str<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>s<span class="op">)</span></span>
+<span id="cb659-9"><a href="stringref.html#cb659-9"></a><span class="op">{</span></span>
+<span id="cb659-10"><a href="stringref.html#cb659-10"></a>    <span class="dt">int</span> len <span class="op">=</span> strxfrm<span class="op">(</span>NULL<span class="op">,</span> s<span class="op">,</span> <span class="dv">0</span><span class="op">)</span> <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb659-11"><a href="stringref.html#cb659-11"></a>    <span class="dt">char</span> <span class="op">*</span>d <span class="op">=</span> malloc<span class="op">(</span>len<span class="op">);</span></span>
+<span id="cb659-12"><a href="stringref.html#cb659-12"></a></span>
+<span id="cb659-13"><a href="stringref.html#cb659-13"></a>    strxfrm<span class="op">(</span>d<span class="op">,</span> s<span class="op">,</span> len<span class="op">);</span></span>
+<span id="cb659-14"><a href="stringref.html#cb659-14"></a></span>
+<span id="cb659-15"><a href="stringref.html#cb659-15"></a>    <span class="cf">return</span> d<span class="op">;</span></span>
+<span id="cb659-16"><a href="stringref.html#cb659-16"></a><span class="op">}</span></span>
+<span id="cb659-17"><a href="stringref.html#cb659-17"></a></span>
+<span id="cb659-18"><a href="stringref.html#cb659-18"></a><span class="co">// Does half the work of a regular strcoll() because the second</span></span>
+<span id="cb659-19"><a href="stringref.html#cb659-19"></a><span class="co">// string arrives already transformed.</span></span>
+<span id="cb659-20"><a href="stringref.html#cb659-20"></a><span class="dt">int</span> half_strcoll<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>s1<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>s2_transformed<span class="op">)</span></span>
+<span id="cb659-21"><a href="stringref.html#cb659-21"></a><span class="op">{</span></span>
+<span id="cb659-22"><a href="stringref.html#cb659-22"></a>    <span class="dt">char</span> <span class="op">*</span>s1_transformed <span class="op">=</span> get_xfrm_str<span class="op">(</span>s1<span class="op">);</span></span>
+<span id="cb659-23"><a href="stringref.html#cb659-23"></a></span>
+<span id="cb659-24"><a href="stringref.html#cb659-24"></a>    <span class="dt">int</span> result <span class="op">=</span> strcmp<span class="op">(</span>s1_transformed<span class="op">,</span> s2_transformed<span class="op">);</span></span>
+<span id="cb659-25"><a href="stringref.html#cb659-25"></a></span>
+<span id="cb659-26"><a href="stringref.html#cb659-26"></a>    free<span class="op">(</span>s1_transformed<span class="op">);</span></span>
+<span id="cb659-27"><a href="stringref.html#cb659-27"></a></span>
+<span id="cb659-28"><a href="stringref.html#cb659-28"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb659-29"><a href="stringref.html#cb659-29"></a><span class="op">}</span></span>
+<span id="cb659-30"><a href="stringref.html#cb659-30"></a></span>
+<span id="cb659-31"><a href="stringref.html#cb659-31"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb659-32"><a href="stringref.html#cb659-32"></a><span class="op">{</span></span>
+<span id="cb659-33"><a href="stringref.html#cb659-33"></a>    setlocale<span class="op">(</span>LC_ALL<span class="op">,</span> <span class="st">&quot;&quot;</span><span class="op">);</span></span>
+<span id="cb659-34"><a href="stringref.html#cb659-34"></a></span>
+<span id="cb659-35"><a href="stringref.html#cb659-35"></a>    <span class="co">// Pre-transform the string to compare against</span></span>
+<span id="cb659-36"><a href="stringref.html#cb659-36"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> get_xfrm_str<span class="op">(</span><span class="st">&quot;éfg&quot;</span><span class="op">);</span></span>
+<span id="cb659-37"><a href="stringref.html#cb659-37"></a></span>
+<span id="cb659-38"><a href="stringref.html#cb659-38"></a>    <span class="co">// Repeatedly compare against &quot;éfg&quot; </span></span>
+<span id="cb659-39"><a href="stringref.html#cb659-39"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> half_strcoll<span class="op">(</span><span class="st">&quot;fgh&quot;</span><span class="op">,</span> s<span class="op">));</span>  <span class="co">// &quot;fgh&quot; &gt; &quot;éfg&quot;</span></span>
+<span id="cb659-40"><a href="stringref.html#cb659-40"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> half_strcoll<span class="op">(</span><span class="st">&quot;àbc&quot;</span><span class="op">,</span> s<span class="op">));</span>  <span class="co">// &quot;àbc&quot; &lt; &quot;éfg&quot;</span></span>
+<span id="cb659-41"><a href="stringref.html#cb659-41"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> half_strcoll<span class="op">(</span><span class="st">&quot;ĥij&quot;</span><span class="op">,</span> s<span class="op">));</span>  <span class="co">// &quot;ĥij&quot; &gt; &quot;éfg&quot;</span></span>
+<span id="cb659-42"><a href="stringref.html#cb659-42"></a>    </span>
+<span id="cb659-43"><a href="stringref.html#cb659-43"></a>    free<span class="op">(</span>s<span class="op">);</span></span>
+<span id="cb659-44"><a href="stringref.html#cb659-44"></a><span class="op">}</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-179">See Also</h3>
+<p><a href="stringref.html#man-strcoll"><code>strcoll()</code></a></p>
+<hr />
+<h2 data-number="25.7" id="man-strchr"><span class="header-section-number">25.7</span> <code>strchr()</code>, <code>strrchr()</code>, <code>memchr()</code></h2>
+<p> </p>
+<p>Find a character in a string</p>
+<h3 class="unnumbered unlisted" id="synopsis-190">Synopsis</h3>
+<div class="sourceCode" id="cb660"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb660-1"><a href="stringref.html#cb660-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb660-2"><a href="stringref.html#cb660-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb660-3"><a href="stringref.html#cb660-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>strchr<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>str<span class="op">,</span> <span class="dt">int</span> c<span class="op">);</span></span>
+<span id="cb660-4"><a href="stringref.html#cb660-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb660-5"><a href="stringref.html#cb660-5" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>strrchr<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>str<span class="op">,</span> <span class="dt">int</span> c<span class="op">);</span></span>
+<span id="cb660-6"><a href="stringref.html#cb660-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb660-7"><a href="stringref.html#cb660-7" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>memchr<span class="op">(</span><span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>s<span class="op">,</span> <span class="dt">int</span> c<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-190">Description</h3>
+<p>The functions <code>strchr()</code> and <code>strrchr</code> find the first or last occurrence of a letter in a string, respectively. (The extra “r” in <code>strrchr()</code> stands for “reverse”–it looks starting at the end of the string and working backward.) Each function returns a pointer to the char in question, or <code>NULL</code> if the letter isn’t found in the string.</p>
+<p><code>memchr()</code> is similar, except that instead of stopping on the first NUL character, it continues searching for however many bytes you specify.</p>
+<p>Quite straightforward.</p>
+<p>One thing you can do if you want to find the next occurrence of the letter after finding the first, is call the function again with the previous return value plus one. (Remember pointer arithmetic?) Or minus one if you’re looking in reverse. Don’t accidentally go off the end of the string!</p>
+<h3 class="unnumbered unlisted" id="return-value-188">Return Value</h3>
+<p>Returns a pointer to the occurrence of the letter in the string, or <code>NULL</code> if the letter is not found.</p>
+<h3 class="unnumbered unlisted" id="example-191">Example</h3>
+<div class="sourceCode" id="cb661"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb661-1"><a href="stringref.html#cb661-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb661-2"><a href="stringref.html#cb661-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb661-3"><a href="stringref.html#cb661-3"></a></span>
+<span id="cb661-4"><a href="stringref.html#cb661-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb661-5"><a href="stringref.html#cb661-5"></a><span class="op">{</span></span>
+<span id="cb661-6"><a href="stringref.html#cb661-6"></a>    <span class="co">// &quot;Hello, world!&quot;</span></span>
+<span id="cb661-7"><a href="stringref.html#cb661-7"></a>    <span class="co">//       ^  ^   ^</span></span>
+<span id="cb661-8"><a href="stringref.html#cb661-8"></a>    <span class="co">//       A  B   C</span></span>
+<span id="cb661-9"><a href="stringref.html#cb661-9"></a></span>
+<span id="cb661-10"><a href="stringref.html#cb661-10"></a>    <span class="dt">char</span> <span class="op">*</span>str <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb661-11"><a href="stringref.html#cb661-11"></a>    <span class="dt">char</span> <span class="op">*</span>p<span class="op">;</span></span>
+<span id="cb661-12"><a href="stringref.html#cb661-12"></a></span>
+<span id="cb661-13"><a href="stringref.html#cb661-13"></a>    p <span class="op">=</span> strchr<span class="op">(</span>str<span class="op">,</span> <span class="ch">&#39;,&#39;</span><span class="op">);</span>       <span class="co">// p now points at position A</span></span>
+<span id="cb661-14"><a href="stringref.html#cb661-14"></a>    p <span class="op">=</span> strrchr<span class="op">(</span>str<span class="op">,</span> <span class="ch">&#39;o&#39;</span><span class="op">);</span>      <span class="co">// p now points at position B</span></span>
+<span id="cb661-15"><a href="stringref.html#cb661-15"></a></span>
+<span id="cb661-16"><a href="stringref.html#cb661-16"></a>    p <span class="op">=</span> memchr<span class="op">(</span>str<span class="op">,</span> <span class="ch">&#39;!&#39;</span><span class="op">,</span> <span class="dv">13</span><span class="op">);</span>   <span class="co">// p now points at position C</span></span>
+<span id="cb661-17"><a href="stringref.html#cb661-17"></a></span>
+<span id="cb661-18"><a href="stringref.html#cb661-18"></a>    <span class="co">// repeatedly find all occurrences of the letter &#39;B&#39;</span></span>
+<span id="cb661-19"><a href="stringref.html#cb661-19"></a>    str <span class="op">=</span> <span class="st">&quot;A BIG BROWN BAT BIT BEEJ&quot;</span><span class="op">;</span></span>
+<span id="cb661-20"><a href="stringref.html#cb661-20"></a></span>
+<span id="cb661-21"><a href="stringref.html#cb661-21"></a>    <span class="cf">for</span><span class="op">(</span>p <span class="op">=</span> strchr<span class="op">(</span>str<span class="op">,</span> <span class="ch">&#39;B&#39;</span><span class="op">);</span> p <span class="op">!=</span> NULL<span class="op">;</span> p <span class="op">=</span> strchr<span class="op">(</span>p <span class="op">+</span> <span class="dv">1</span><span class="op">,</span> <span class="ch">&#39;B&#39;</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb661-22"><a href="stringref.html#cb661-22"></a>        printf<span class="op">(</span><span class="st">&quot;Found a &#39;B&#39; here: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> p<span class="op">);</span></span>
+<span id="cb661-23"><a href="stringref.html#cb661-23"></a>    <span class="op">}</span></span>
+<span id="cb661-24"><a href="stringref.html#cb661-24"></a><span class="op">}</span></span></code></pre></div>
+<p>Output:</p>
+<div class="sourceCode" id="cb662"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb662-1"><a href="stringref.html#cb662-1" aria-hidden="true" tabindex="-1"></a>Found a &#39;B&#39; here: BIG BROWN BAT BIT BEEJ</span>
+<span id="cb662-2"><a href="stringref.html#cb662-2" aria-hidden="true" tabindex="-1"></a>Found a &#39;B&#39; here: BROWN BAT BIT BEEJ</span>
+<span id="cb662-3"><a href="stringref.html#cb662-3" aria-hidden="true" tabindex="-1"></a>Found a &#39;B&#39; here: BAT BIT BEEJ</span>
+<span id="cb662-4"><a href="stringref.html#cb662-4" aria-hidden="true" tabindex="-1"></a>Found a &#39;B&#39; here: BIT BEEJ</span>
+<span id="cb662-5"><a href="stringref.html#cb662-5" aria-hidden="true" tabindex="-1"></a>Found a &#39;B&#39; here: BEEJ</span></code></pre></div>
+<!--
+### See Also {.unnumbered .unlisted}
+-->
+<hr />
+<h2 data-number="25.8" id="man-strspn"><span class="header-section-number">25.8</span> <code>strspn()</code>, <code>strcspn()</code></h2>
+<p> </p>
+<p>Return the length of a string consisting entirely of a set of characters, or of not a set of characters</p>
+<h3 class="unnumbered unlisted" id="synopsis-191">Synopsis</h3>
+<div class="sourceCode" id="cb663"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb663-1"><a href="stringref.html#cb663-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb663-2"><a href="stringref.html#cb663-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb663-3"><a href="stringref.html#cb663-3" aria-hidden="true" tabindex="-1"></a><span class="dt">size_t</span> strspn<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>str<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>accept<span class="op">);</span></span>
+<span id="cb663-4"><a href="stringref.html#cb663-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb663-5"><a href="stringref.html#cb663-5" aria-hidden="true" tabindex="-1"></a><span class="dt">size_t</span> strcspn<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>str<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>reject<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-191">Description</h3>
+<p><code>strspn()</code> will tell you the length of a string consisting entirely of the set of characters in <code>accept</code>. That is, it starts walking down <code>str</code> until it finds a character that is <em>not</em> in the set (that is, a character that is not to be accepted), and returns the length of the string so far.</p>
+<p><code>strcspn()</code> works much the same way, except that it walks down <code>str</code> until it finds a character in the <code>reject</code> set (that is, a character that is to be rejected.) It then returns the length of the string so far.</p>
+<h3 class="unnumbered unlisted" id="return-value-189">Return Value</h3>
+<p>The length of the string consisting of all characters in <code>accept</code> (for <code>strspn()</code>), or the length of the string consisting of all characters except <code>reject</code> (for <code>strcspn()</code>).</p>
+<h3 class="unnumbered unlisted" id="example-192">Example</h3>
+<div class="sourceCode" id="cb664"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb664-1"><a href="stringref.html#cb664-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb664-2"><a href="stringref.html#cb664-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb664-3"><a href="stringref.html#cb664-3"></a></span>
+<span id="cb664-4"><a href="stringref.html#cb664-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb664-5"><a href="stringref.html#cb664-5"></a><span class="op">{</span></span>
+<span id="cb664-6"><a href="stringref.html#cb664-6"></a>    <span class="dt">char</span> str1<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;a banana&quot;</span><span class="op">;</span></span>
+<span id="cb664-7"><a href="stringref.html#cb664-7"></a>    <span class="dt">char</span> str2<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;the bolivian navy on maenuvers in the south pacific&quot;</span><span class="op">;</span></span>
+<span id="cb664-8"><a href="stringref.html#cb664-8"></a>    <span class="dt">int</span> n<span class="op">;</span></span>
+<span id="cb664-9"><a href="stringref.html#cb664-9"></a></span>
+<span id="cb664-10"><a href="stringref.html#cb664-10"></a>    <span class="co">// how many letters in str1 until we reach something that&#39;s not a vowel?</span></span>
+<span id="cb664-11"><a href="stringref.html#cb664-11"></a>    n <span class="op">=</span> strspn<span class="op">(</span>str1<span class="op">,</span> <span class="st">&quot;aeiou&quot;</span><span class="op">);</span></span>
+<span id="cb664-12"><a href="stringref.html#cb664-12"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> n<span class="op">);</span>  <span class="co">// n == 1, just &quot;a&quot;</span></span>
+<span id="cb664-13"><a href="stringref.html#cb664-13"></a></span>
+<span id="cb664-14"><a href="stringref.html#cb664-14"></a>    <span class="co">// how many letters in str1 until we reach something that&#39;s not a, b,</span></span>
+<span id="cb664-15"><a href="stringref.html#cb664-15"></a>    <span class="co">// or space?</span></span>
+<span id="cb664-16"><a href="stringref.html#cb664-16"></a>    n <span class="op">=</span> strspn<span class="op">(</span>str1<span class="op">,</span> <span class="st">&quot;ab &quot;</span><span class="op">);</span></span>
+<span id="cb664-17"><a href="stringref.html#cb664-17"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> n<span class="op">);</span>  <span class="co">// n == 4, &quot;a ba&quot;</span></span>
+<span id="cb664-18"><a href="stringref.html#cb664-18"></a></span>
+<span id="cb664-19"><a href="stringref.html#cb664-19"></a>    <span class="co">// how many letters in str2 before we get a &quot;y&quot;?</span></span>
+<span id="cb664-20"><a href="stringref.html#cb664-20"></a>    n <span class="op">=</span> strcspn<span class="op">(</span>str2<span class="op">,</span> <span class="st">&quot;y&quot;</span><span class="op">);</span></span>
+<span id="cb664-21"><a href="stringref.html#cb664-21"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> n<span class="op">);</span>  <span class="co">// n = 16, &quot;the bolivian nav&quot;</span></span>
+<span id="cb664-22"><a href="stringref.html#cb664-22"></a><span class="op">}</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-180">See Also</h3>
+<p><a href="stringref.html#man-strchr"><code>strchr()</code></a>, <a href="stringref.html#man-strchr"><code>strrchr()</code></a></p>
+<hr />
+<h2 data-number="25.9" id="man-strpbrk"><span class="header-section-number">25.9</span> <code>strpbrk()</code></h2>
+<p></p>
+<p>Search a string for one of a set of characters</p>
+<h3 class="unnumbered unlisted" id="synopsis-192">Synopsis</h3>
+<div class="sourceCode" id="cb665"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb665-1"><a href="stringref.html#cb665-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb665-2"><a href="stringref.html#cb665-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb665-3"><a href="stringref.html#cb665-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>strpbrk<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>s1<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>s2<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-192">Description</h3>
+<p>This function searches string <code>s1</code> for any of the characters that are found in string <code>s2</code>.</p>
+<p>It’s just like how <code>strchr()</code> searches for a specific character in a string, except it will match <em>any</em> of the characters found in <code>s2</code>.</p>
+<p>Think of the power!</p>
+<h3 class="unnumbered unlisted" id="return-value-190">Return Value</h3>
+<p>Returns a pointer to the first character matched in <code>s1</code>, or NULL if the string isn’t found.</p>
+<h3 class="unnumbered unlisted" id="example-193">Example</h3>
+<div class="sourceCode" id="cb666"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb666-1"><a href="stringref.html#cb666-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb666-2"><a href="stringref.html#cb666-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb666-3"><a href="stringref.html#cb666-3"></a></span>
+<span id="cb666-4"><a href="stringref.html#cb666-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb666-5"><a href="stringref.html#cb666-5"></a><span class="op">{</span></span>
+<span id="cb666-6"><a href="stringref.html#cb666-6"></a>    <span class="co">//  p points here after strpbrk</span></span>
+<span id="cb666-7"><a href="stringref.html#cb666-7"></a>    <span class="co">//              v</span></span>
+<span id="cb666-8"><a href="stringref.html#cb666-8"></a>    <span class="dt">char</span> <span class="op">*</span>s1 <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb666-9"><a href="stringref.html#cb666-9"></a>    <span class="dt">char</span> <span class="op">*</span>s2 <span class="op">=</span> <span class="st">&quot;dow!&quot;</span><span class="op">;</span>  <span class="co">// Match any of these chars</span></span>
+<span id="cb666-10"><a href="stringref.html#cb666-10"></a></span>
+<span id="cb666-11"><a href="stringref.html#cb666-11"></a>    <span class="dt">char</span> <span class="op">*</span>p <span class="op">=</span> strpbrk<span class="op">(</span>s1<span class="op">,</span> s2<span class="op">);</span>  <span class="co">// p points to the o</span></span>
+<span id="cb666-12"><a href="stringref.html#cb666-12"></a></span>
+<span id="cb666-13"><a href="stringref.html#cb666-13"></a>    printf<span class="op">(</span><span class="st">&quot;%s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> p<span class="op">);</span>  <span class="co">// &quot;o, world!&quot;</span></span>
+<span id="cb666-14"><a href="stringref.html#cb666-14"></a><span class="op">}</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-181">See Also</h3>
+<p><a href="stringref.html#man-strchr"><code>strchr()</code></a>, <a href="stringref.html#man-strchr"><code>memchr()</code></a></p>
+<hr />
+<h2 data-number="25.10" id="man-strstr"><span class="header-section-number">25.10</span> <code>strstr()</code></h2>
+<p></p>
+<p>Find a string in another string</p>
+<h3 class="unnumbered unlisted" id="synopsis-193">Synopsis</h3>
+<div class="sourceCode" id="cb667"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb667-1"><a href="stringref.html#cb667-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb667-2"><a href="stringref.html#cb667-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb667-3"><a href="stringref.html#cb667-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>strstr<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>str<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>substr<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-193">Description</h3>
+<p>Let’s say you have a big long string, and you want to find a word, or whatever substring strikes your fancy, inside the first string. Then <code>strstr()</code> is for you! It’ll return a pointer to the <code>substr</code> within the <code>str</code>!</p>
+<h3 class="unnumbered unlisted" id="return-value-191">Return Value</h3>
+<p>You get back a pointer to the occurrence of the <code>substr</code> inside the <code>str</code>, or <code>NULL</code> if the substring can’t be found.</p>
+<h3 class="unnumbered unlisted" id="example-194">Example</h3>
+<div class="sourceCode" id="cb668"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb668-1"><a href="stringref.html#cb668-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb668-2"><a href="stringref.html#cb668-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb668-3"><a href="stringref.html#cb668-3"></a></span>
+<span id="cb668-4"><a href="stringref.html#cb668-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb668-5"><a href="stringref.html#cb668-5"></a><span class="op">{</span></span>
+<span id="cb668-6"><a href="stringref.html#cb668-6"></a>    <span class="dt">char</span> <span class="op">*</span>str <span class="op">=</span> <span class="st">&quot;The quick brown fox jumped over the lazy dogs.&quot;</span><span class="op">;</span></span>
+<span id="cb668-7"><a href="stringref.html#cb668-7"></a>    <span class="dt">char</span> <span class="op">*</span>p<span class="op">;</span></span>
+<span id="cb668-8"><a href="stringref.html#cb668-8"></a></span>
+<span id="cb668-9"><a href="stringref.html#cb668-9"></a>    p <span class="op">=</span> strstr<span class="op">(</span>str<span class="op">,</span> <span class="st">&quot;lazy&quot;</span><span class="op">);</span></span>
+<span id="cb668-10"><a href="stringref.html#cb668-10"></a>    printf<span class="op">(</span><span class="st">&quot;%s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> p <span class="op">==</span> NULL<span class="op">?</span> <span class="st">&quot;null&quot;</span><span class="op">:</span> p<span class="op">);</span> <span class="co">// &quot;lazy dogs.&quot;</span></span>
+<span id="cb668-11"><a href="stringref.html#cb668-11"></a></span>
+<span id="cb668-12"><a href="stringref.html#cb668-12"></a>    <span class="co">// p is NULL after this, since the string &quot;wombat&quot; isn&#39;t in str:</span></span>
+<span id="cb668-13"><a href="stringref.html#cb668-13"></a>    p <span class="op">=</span> strstr<span class="op">(</span>str<span class="op">,</span> <span class="st">&quot;wombat&quot;</span><span class="op">);</span></span>
+<span id="cb668-14"><a href="stringref.html#cb668-14"></a>    printf<span class="op">(</span><span class="st">&quot;%s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> p <span class="op">==</span> NULL<span class="op">?</span> <span class="st">&quot;null&quot;</span><span class="op">:</span> p<span class="op">);</span> <span class="co">// &quot;null&quot;</span></span>
+<span id="cb668-15"><a href="stringref.html#cb668-15"></a><span class="op">}</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-182">See Also</h3>
+<p><a href="stringref.html#man-strchr"><code>strchr()</code></a>, <a href="stringref.html#man-strchr"><code>strrchr()</code></a>, <a href="stringref.html#man-strspn"><code>strspn()</code></a>, <a href="stringref.html#man-strspn"><code>strcspn()</code></a></p>
+<hr />
+<h2 data-number="25.11" id="man-strtok"><span class="header-section-number">25.11</span> <code>strtok()</code></h2>
+<p></p>
+<p>Tokenize a string</p>
+<h3 class="unnumbered unlisted" id="synopsis-194">Synopsis</h3>
+<div class="sourceCode" id="cb669"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb669-1"><a href="stringref.html#cb669-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb669-2"><a href="stringref.html#cb669-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb669-3"><a href="stringref.html#cb669-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>strtok<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>str<span class="op">,</span> <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>delim<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-194">Description</h3>
+<p>If you have a string that has a bunch of separators in it, and you want to break that string up into individual pieces, this function can do it for you.</p>
+<p>The usage is a little bit weird, but at least whenever you see the function in the wild, it’s consistently weird.</p>
+<p>Basically, the first time you call it, you pass the string, <code>str</code> that you want to break up in as the first argument. For each subsequent call to get more tokens out of the string, you pass <code>NULL</code>. This is a little weird, but <code>strtok()</code> remembers the string you originally passed in, and continues to strip tokens off for you.</p>
+<p>Note that it does this by actually putting a NUL terminator after the token, and then returning a pointer to the start of the token. So the original string you pass in is destroyed, as it were. If you need to preserve the string, be sure to pass a copy of it to <code>strtok()</code> so the original isn’t destroyed.</p>
+<h3 class="unnumbered unlisted" id="return-value-192">Return Value</h3>
+<p>A pointer to the next token. If you’re out of tokens, <code>NULL</code> is returned.</p>
+<h3 class="unnumbered unlisted" id="example-195">Example</h3>
+<div class="sourceCode" id="cb670"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb670-1"><a href="stringref.html#cb670-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb670-2"><a href="stringref.html#cb670-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb670-3"><a href="stringref.html#cb670-3"></a></span>
+<span id="cb670-4"><a href="stringref.html#cb670-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb670-5"><a href="stringref.html#cb670-5"></a><span class="op">{</span></span>
+<span id="cb670-6"><a href="stringref.html#cb670-6"></a>    <span class="co">// break up the string into a series of space or</span></span>
+<span id="cb670-7"><a href="stringref.html#cb670-7"></a>    <span class="co">// punctuation-separated words</span></span>
+<span id="cb670-8"><a href="stringref.html#cb670-8"></a>    <span class="dt">char</span> str<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Where is my bacon, dude?&quot;</span><span class="op">;</span></span>
+<span id="cb670-9"><a href="stringref.html#cb670-9"></a>    <span class="dt">char</span> <span class="op">*</span>token<span class="op">;</span></span>
+<span id="cb670-10"><a href="stringref.html#cb670-10"></a></span>
+<span id="cb670-11"><a href="stringref.html#cb670-11"></a>    <span class="co">// Note that the following if-do-while construct is very very</span></span>
+<span id="cb670-12"><a href="stringref.html#cb670-12"></a>    <span class="co">// very very very common to see when using strtok().</span></span>
+<span id="cb670-13"><a href="stringref.html#cb670-13"></a></span>
+<span id="cb670-14"><a href="stringref.html#cb670-14"></a>    <span class="co">// grab the first token (making sure there is a first token!)</span></span>
+<span id="cb670-15"><a href="stringref.html#cb670-15"></a>    <span class="cf">if</span> <span class="op">((</span>token <span class="op">=</span> strtok<span class="op">(</span>str<span class="op">,</span> <span class="st">&quot;.,?! &quot;</span><span class="op">))</span> <span class="op">!=</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb670-16"><a href="stringref.html#cb670-16"></a>        <span class="cf">do</span> <span class="op">{</span></span>
+<span id="cb670-17"><a href="stringref.html#cb670-17"></a>            printf<span class="op">(</span><span class="st">&quot;Word: </span><span class="sc">\&quot;</span><span class="st">%s</span><span class="sc">\&quot;\n</span><span class="st">&quot;</span><span class="op">,</span> token<span class="op">);</span></span>
+<span id="cb670-18"><a href="stringref.html#cb670-18"></a></span>
+<span id="cb670-19"><a href="stringref.html#cb670-19"></a>            <span class="co">// now, the while continuation condition grabs the</span></span>
+<span id="cb670-20"><a href="stringref.html#cb670-20"></a>            <span class="co">// next token (by passing NULL as the first param)</span></span>
+<span id="cb670-21"><a href="stringref.html#cb670-21"></a>            <span class="co">// and continues if the token&#39;s not NULL:</span></span>
+<span id="cb670-22"><a href="stringref.html#cb670-22"></a>        <span class="op">}</span> <span class="cf">while</span> <span class="op">((</span>token <span class="op">=</span> strtok<span class="op">(</span>NULL<span class="op">,</span> <span class="st">&quot;.,?! &quot;</span><span class="op">))</span> <span class="op">!=</span> NULL<span class="op">);</span></span>
+<span id="cb670-23"><a href="stringref.html#cb670-23"></a>    <span class="op">}</span></span>
+<span id="cb670-24"><a href="stringref.html#cb670-24"></a><span class="op">}</span></span></code></pre></div>
+<p>Output:</p>
+<div class="sourceCode" id="cb671"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb671-1"><a href="stringref.html#cb671-1" aria-hidden="true" tabindex="-1"></a>Word: &quot;Where&quot;</span>
+<span id="cb671-2"><a href="stringref.html#cb671-2" aria-hidden="true" tabindex="-1"></a>Word: &quot;is&quot;</span>
+<span id="cb671-3"><a href="stringref.html#cb671-3" aria-hidden="true" tabindex="-1"></a>Word: &quot;my&quot;</span>
+<span id="cb671-4"><a href="stringref.html#cb671-4" aria-hidden="true" tabindex="-1"></a>Word: &quot;bacon&quot;</span>
+<span id="cb671-5"><a href="stringref.html#cb671-5" aria-hidden="true" tabindex="-1"></a>Word: &quot;dude&quot;</span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-183">See Also</h3>
+<p><a href="stringref.html#man-strchr"><code>strchr()</code></a>, <a href="stringref.html#man-strchr"><code>strrchr()</code></a>, <a href="stringref.html#man-strspn"><code>strspn()</code></a>, <a href="stringref.html#man-strspn"><code>strcspn()</code></a></p>
+<hr />
+<h2 data-number="25.12" id="man-memset"><span class="header-section-number">25.12</span> <code>memset()</code></h2>
+<p></p>
+<p>Set a region of memory to a certain value</p>
+<h3 class="unnumbered unlisted" id="synopsis-195">Synopsis</h3>
+<div class="sourceCode" id="cb672"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb672-1"><a href="stringref.html#cb672-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb672-2"><a href="stringref.html#cb672-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb672-3"><a href="stringref.html#cb672-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>memset<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>s<span class="op">,</span> <span class="dt">int</span> c<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-195">Description</h3>
+<p>This function is what you use to set a region of memory to a particular value, namely <code>c</code> converted into <code>unsigned char</code>.</p>
+<p>The most common usage is to zero out an array or <code>struct</code>.</p>
+<h3 class="unnumbered unlisted" id="return-value-193">Return Value</h3>
+<p><code>memset()</code> returns whatever you passed in as <code>s</code> for happy convenience.</p>
+<h3 class="unnumbered unlisted" id="example-196">Example</h3>
+<div class="sourceCode" id="cb673"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb673-1"><a href="stringref.html#cb673-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb673-2"><a href="stringref.html#cb673-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb673-3"><a href="stringref.html#cb673-3"></a></span>
+<span id="cb673-4"><a href="stringref.html#cb673-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb673-5"><a href="stringref.html#cb673-5"></a><span class="op">{</span></span>
+<span id="cb673-6"><a href="stringref.html#cb673-6"></a>    <span class="kw">struct</span> banana <span class="op">{</span></span>
+<span id="cb673-7"><a href="stringref.html#cb673-7"></a>        <span class="dt">float</span> ripeness<span class="op">;</span></span>
+<span id="cb673-8"><a href="stringref.html#cb673-8"></a>        <span class="dt">char</span> <span class="op">*</span>peel_color<span class="op">;</span></span>
+<span id="cb673-9"><a href="stringref.html#cb673-9"></a>        <span class="dt">int</span> grams<span class="op">;</span></span>
+<span id="cb673-10"><a href="stringref.html#cb673-10"></a>    <span class="op">};</span></span>
+<span id="cb673-11"><a href="stringref.html#cb673-11"></a></span>
+<span id="cb673-12"><a href="stringref.html#cb673-12"></a>    <span class="kw">struct</span> banana b<span class="op">;</span></span>
+<span id="cb673-13"><a href="stringref.html#cb673-13"></a></span>
+<span id="cb673-14"><a href="stringref.html#cb673-14"></a>    memset<span class="op">(&amp;</span>b<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="kw">sizeof</span> b<span class="op">);</span></span>
+<span id="cb673-15"><a href="stringref.html#cb673-15"></a></span>
+<span id="cb673-16"><a href="stringref.html#cb673-16"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> b<span class="op">.</span>ripeness <span class="op">==</span> <span class="fl">0.0</span><span class="op">);</span>     <span class="co">// True</span></span>
+<span id="cb673-17"><a href="stringref.html#cb673-17"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> b<span class="op">.</span>peel_color <span class="op">==</span> NULL<span class="op">);</span>  <span class="co">// True</span></span>
+<span id="cb673-18"><a href="stringref.html#cb673-18"></a>    printf<span class="op">(</span><span class="st">&quot;%d</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> b<span class="op">.</span>grams <span class="op">==</span> <span class="dv">0</span><span class="op">);</span>          <span class="co">// True</span></span>
+<span id="cb673-19"><a href="stringref.html#cb673-19"></a><span class="op">}</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-184">See Also</h3>
+<p><a href="stringref.html#man-memcpy"><code>memcpy()</code></a>, <a href="stringref.html#man-memcpy"><code>memmove()</code></a></p>
+<hr />
+<h2 data-number="25.13" id="man-strerror"><span class="header-section-number">25.13</span> <code>strerror()</code></h2>
+<p></p>
+<p>Get a string version of an error number</p>
+<h3 class="unnumbered unlisted" id="synopsis-196">Synopsis</h3>
+<div class="sourceCode" id="cb674"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb674-1"><a href="stringref.html#cb674-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb674-2"><a href="stringref.html#cb674-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb674-3"><a href="stringref.html#cb674-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>strerror<span class="op">(</span><span class="dt">int</span> errnum<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-196">Description</h3>
+<p>This function ties closely into <code>perror()</code> (which prints a human-readable error message corresponding to <code>errno</code>). But instead of printing, <code>strerror()</code> returns a pointer to the locale-specific error message string.</p>
+<p>So if you ever need that string back for some reason (e.g. you’re going to <code>fprintf()</code> it to a file or something), this function will give it to you. All you need to do is pass in <code>errno</code> as an argument. (Recall that <code>errno</code> gets set as an error status by a variety of functions.)</p>
+<p>You can actually pass in any integer for <code>errnum</code> you want. The function will return <em>some</em> message, even if the number doesn’t correspond to any known value for <code>errno</code>.</p>
+<p>The values of <code>errno</code> and the strings returned by <code>strerror()</code> are system-dependent.</p>
+<h3 class="unnumbered unlisted" id="return-value-194">Return Value</h3>
+<p>A string error message corresponding to the given error number.</p>
+<p>You are not allowed to modify the returned string.</p>
+<h3 class="unnumbered unlisted" id="example-197">Example</h3>
+<div class="sourceCode" id="cb675"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb675-1"><a href="stringref.html#cb675-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb675-2"><a href="stringref.html#cb675-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb675-3"><a href="stringref.html#cb675-3"></a><span class="pp">#include </span><span class="im">&lt;errno.h&gt;</span></span>
+<span id="cb675-4"><a href="stringref.html#cb675-4"></a></span>
+<span id="cb675-5"><a href="stringref.html#cb675-5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb675-6"><a href="stringref.html#cb675-6"></a><span class="op">{</span></span>
+<span id="cb675-7"><a href="stringref.html#cb675-7"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;NONEXISTENT_FILE.TXT&quot;</span><span class="op">,</span> <span class="st">&quot;r&quot;</span><span class="op">);</span></span>
+<span id="cb675-8"><a href="stringref.html#cb675-8"></a></span>
+<span id="cb675-9"><a href="stringref.html#cb675-9"></a>    <span class="cf">if</span> <span class="op">(</span>fp <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb675-10"><a href="stringref.html#cb675-10"></a>        <span class="dt">char</span> <span class="op">*</span>errmsg <span class="op">=</span> strerror<span class="op">(</span>errno<span class="op">);</span></span>
+<span id="cb675-11"><a href="stringref.html#cb675-11"></a>        printf<span class="op">(</span><span class="st">&quot;Error %d opening file: %s</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> errno<span class="op">,</span> errmsg<span class="op">);</span></span>
+<span id="cb675-12"><a href="stringref.html#cb675-12"></a>    <span class="op">}</span></span>
+<span id="cb675-13"><a href="stringref.html#cb675-13"></a><span class="op">}</span></span></code></pre></div>
+<p>Output:</p>
+<div class="sourceCode" id="cb676"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb676-1"><a href="stringref.html#cb676-1" aria-hidden="true" tabindex="-1"></a>Error 2 opening file: No such file or directory</span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-185">See Also</h3>
+<p><a href="stdio.html#man-perror"><code>perror()</code></a></p>
+<hr />
+<h2 data-number="25.14" id="man-strlen"><span class="header-section-number">25.14</span> <code>strlen()</code></h2>
+<p></p>
+<p>Returns the length of a string</p>
+<h3 class="unnumbered unlisted" id="synopsis-197">Synopsis</h3>
+<div class="sourceCode" id="cb677"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb677-1"><a href="stringref.html#cb677-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb677-2"><a href="stringref.html#cb677-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb677-3"><a href="stringref.html#cb677-3" aria-hidden="true" tabindex="-1"></a><span class="dt">size_t</span> strlen<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>s<span class="op">);</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="description-197">Description</h3>
+<p>This function returns the length of the passed null-terminated string (not counting the NUL character at the end). It does this by walking down the string and counting the bytes until the NUL character, so it’s a little time consuming. If you have to get the length of the same string repeatedly, save it off in a variable somewhere.</p>
+<h3 class="unnumbered unlisted" id="return-value-195">Return Value</h3>
+<p>Returns the number of bytes in the string. Note that this might be different than the number of characters in a multibyte string.</p>
+<h3 class="unnumbered unlisted" id="example-198">Example</h3>
+<div class="sourceCode" id="cb678"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb678-1"><a href="stringref.html#cb678-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb678-2"><a href="stringref.html#cb678-2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb678-3"><a href="stringref.html#cb678-3"></a></span>
+<span id="cb678-4"><a href="stringref.html#cb678-4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb678-5"><a href="stringref.html#cb678-5"></a><span class="op">{</span></span>
+<span id="cb678-6"><a href="stringref.html#cb678-6"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span> <span class="co">// 13 characters</span></span>
+<span id="cb678-7"><a href="stringref.html#cb678-7"></a></span>
+<span id="cb678-8"><a href="stringref.html#cb678-8"></a>    <span class="co">// prints &quot;The string is 13 characters long.&quot;:</span></span>
+<span id="cb678-9"><a href="stringref.html#cb678-9"></a></span>
+<span id="cb678-10"><a href="stringref.html#cb678-10"></a>    printf<span class="op">(</span><span class="st">&quot;The string is %zu characters long.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strlen<span class="op">(</span>s<span class="op">));</span></span>
+<span id="cb678-11"><a href="stringref.html#cb678-11"></a><span class="op">}</span></span></code></pre></div>
+<h3 class="unnumbered unlisted" id="see-also-186">See Also</h3>
+<!--
+***
+## `vprintf()`, `vfprintf()`, `vsprintf()`, `vsnprintf()` {#man-vprintf}
+
+### Synopsis {.unnumbered .unlisted}
+### Description {.unnumbered .unlisted}
+### Return Value {.unnumbered .unlisted}
+### Example {.unnumbered .unlisted}
+### See Also {.unnumbered .unlisted}
+[`sprintf()`](#man-printf),
+-->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="stdnoreturn.html">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="tgmath.html">Next</a></span></div></body>
+</html>

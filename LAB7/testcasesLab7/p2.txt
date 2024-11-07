@@ -1,0 +1,469 @@
+Testcases - takehome
+
+tc1 - Serialization (1.5 marks)
+
+Packet
+packet* p = new packet();
+strcpy(p->data, "This is the first message\0");
+p->version = 1;
+p->headerLength = 5;
+p->totalLength = 7 + strlen(p->data);
+p->srcDept = 2;
+p->destDept = 1;
+p->checkSum = 0;
+p->hops = 0;
+p->type = 0;
+p->ACK = 1;
+
+header start location = 3
+
+Output buffer (in decimal)
+0 3 84 21 32 68 0 1 104 105 115 32 105 115 32 116 104 101 32 102 105 114 115 116 32 109 101 115 115 97 103 101
+
+checkSum value will not be checked.
+---------------------------------------------------------------------------------------------------------------
+tc2 - Serialization (1.5 marks)
+
+Packet
+packet* p = new packet();
+strcpy(p->data, "This is a broadcast message\0");
+p->version = 1;
+p->headerLength = 6;
+p->totalLength = 8 + strlen(p->data);
+p->srcDept = 2;
+p->destDept = 7;
+p->checkSum = 0;
+p->hops = 0;
+p->type = 0;
+p->ACK = 1;
+p->srcCampus = 1;
+p->destCampus = 15;
+
+header start location = 6
+
+Output buffer (decimal)
+0 6 84 104 105 115 22 35 92 0 1 31 32 105 115 32 97 32 98 114 111 97 100 99 97 115 116 32 109 101 115 115 97 103 101
+----------------------------------------------------------------------------------------------------------------
+tc3 - Deserialization (1 mark)
+
+Input buffer (in decimal)
+0 3 84 21 32 68 0 1 104 105 115 32 105 115 32 116 104 101 32 102 105 114 115 116 32 109 101 115 115 97 103 101 
+
+Output packet
+packet
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 32
+    Source Department: 2
+    Destination Department: 1
+    CheckSum: 0
+    Hops: 0
+    Type: 0
+    ACK: 1
+    Data: This is the first message
+}
+---------------------------------------------------------------------------------------------------------------
+tc4 - Deserialization (1 mark)
+
+Input buffer (in decimal)
+0 3 84 22 35 92 0 1 31 104 105 115 32 105 115 32 97 32 98 114 111 97 100 99 97 115 116 32 109 101 115 115 97 103 101 
+
+Output packet
+packet
+{
+    Version: 1
+    Header Length: 6
+    Total Length: 35
+    Source Department: 2
+    Destination Department: 7
+    CheckSum: 0
+    Hops: 0
+    Type: 0
+    ACK: 1
+    Source Campus: 1
+    Destination Campus: 15
+    Data: This is a broadcast message
+}
+----------------------------------------------------------------------------------------------------------------
+tc5 - Server (0.625)
+
+Inputs:
+
+packet* p = new packet();
+strcpy(p->data, "message 1\0");
+p->version = 1;
+p->headerLength = 6;
+p->totalLength = 8 + strlen(p->data);
+p->srcDept = 3;
+p->destDept = 4;
+p->checkSum = 0;
+p->hops = 0;
+p->type = 0;
+p->ACK = 0;
+p->srcCampus = 0;
+p->destCampus = 1;
+
+int pilani_dept[] = {1, 2, 3, 4};
+int goa_dept[] = {1, 2};
+int hyd_dept[] = {2, 3, 4, 5, 6}; 
+int* validDept[] = {pilani_dept, goa_dept, hyd_dept};
+int numDept[] = {4, 2, 5};
+
+int priv = 21020;
+
+Output packets:
+1) packet1 = NULL
+2) packet2
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 27
+    Source Department: 0
+    Destination Department: 3
+    CheckSum: 0
+    Hops: 0
+    Type: 0
+    ACK: 0
+    Data: DST FIELDS INVALID 0
+}
+----------------------------------------------------------------------------------------------------------------
+tc6 - Server (0.625)
+
+Inputs:
+
+packet* p = new packet();
+strcpy(p->data, "message 2\0");
+p->version = 1;
+p->headerLength = 6;
+p->totalLength = 8 + strlen(p->data);
+p->srcDept = 2;
+p->destDept = 2;
+p->checkSum = 0;
+p->hops = 0;
+p->type = 0;
+p->ACK = 0;
+p->srcCampus = 0;
+p->destCampus = 2;
+
+int pilani_dept[] = {1, 2, 3, 4};
+int goa_dept[] = {1, 2};
+int hyd_dept[] = {2, 3, 4, 5, 6}; 
+int* validDept[] = {pilani_dept, goa_dept, hyd_dept};
+int numDept[] = {4, 2, 5};
+
+int priv = 21020;
+
+Output packets:
+1) packet1 = NULL
+2) packet2
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 26
+    Source Department: 0
+    Destination Department: 2
+    CheckSum: 0
+    Hops: 0
+    Type: 0
+    ACK: 0
+    Data: PERMISSION DENIED 1
+}
+----------------------------------------------------------------------------------------------------------------
+tc7 - Server (0.625)
+
+Inputs:
+
+packet* p = new packet();
+strcpy(p->data, "message 3\0");
+p->version = 1;
+p->headerLength = 6;
+p->totalLength = 8 + strlen(p->data);
+p->srcDept = 3;
+p->destDept = 1;
+p->checkSum = 0;
+p->hops = 0;
+p->type = 0;
+p->ACK = 1;
+p->srcCampus = 0;
+p->destCampus = 1;
+
+int pilani_dept[] = {1, 2, 3, 4};
+int goa_dept[] = {1, 2};
+int hyd_dept[] = {2, 3, 4, 5, 6}; 
+int* validDept[] = {pilani_dept, goa_dept, hyd_dept};
+int numDept[] = {4, 2, 5};
+
+int priv = 21020;
+
+Output packets:
+1) packet1 = NULL
+2) packet2
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 26
+    Source Department: 0
+    Destination Department: 3
+    CheckSum: 0
+    Hops: 0
+    Type: 0
+    ACK: 0
+    Data: PERMISSION DENIED 1
+}
+----------------------------------------------------------------------------------------------------------------
+tc8 - Server (0.625)
+
+Inputs:
+
+packet* p = new packet();
+strcpy(p->data, "message 3\0");
+p->version = 1;
+p->headerLength = 6;
+p->totalLength = 8 + strlen(p->data);
+p->srcDept = 3;
+p->destDept = 1;
+p->checkSum = 0;
+p->hops = 0;
+p->type = 0;
+p->ACK = 1;
+p->srcCampus = 0;
+p->destCampus = 1;
+
+int pilani_dept[] = {1, 2, 3, 4};
+int goa_dept[] = {1, 2};
+int hyd_dept[] = {2, 3, 4, 5, 6}; 
+int* validDept[] = {pilani_dept, goa_dept, hyd_dept};
+int numDept[] = {4, 2, 5};
+
+int priv = 21020;
+
+Output packets:
+1) packet1
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 16
+    Source Department: 3
+    Destination Department: 7
+    CheckSum: 0
+    Hops: 1
+    Type: 0
+    ACK: 1
+    Data: message 4
+}
+2) packet2
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 26
+    Source Department: 0
+    Destination Department: 3
+    CheckSum: 0
+    Hops: 0
+    Type: 0
+    ACK: 0
+    Data: PERMISSION DENIED 1
+}
+----------------------------------------------------------------------------------------------------------------
+tc9 - Server (0.625)
+
+Inputs:
+
+packet* p = new packet();
+strcpy(p->data, "message 5\0");
+p->version = 1;
+p->headerLength = 6;
+p->totalLength = 8 + strlen(p->data);
+p->srcDept = 4;
+p->destDept = 7;
+p->checkSum = 0;
+p->hops = 0;
+p->type = 0;
+p->ACK = 1;
+p->srcCampus = 0;
+p->destCampus = 15;
+
+int pilani_dept[] = {1, 2, 3, 4};
+int goa_dept[] = {1, 2};
+int hyd_dept[] = {2, 3, 4, 5, 6}; 
+int* validDept[] = {pilani_dept, goa_dept, hyd_dept};
+int numDept[] = {4, 2, 5};
+
+int priv = 21020;
+
+Output packets:
+1) packet1
+{
+    Version: 1
+    Header Length: 6
+    Total Length: 17
+    Source Department: 4
+    Destination Department: 7
+    CheckSum: 0
+    Hops: 1
+    Type: 0
+    ACK: 1
+    Source Campus: 0
+    Destination Campus: 15
+    Data: message 5
+}
+2) packet2
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 7
+    Source Department: 0
+    Destination Department: 4
+    CheckSum: 0
+    Hops: 0
+    Type: 0
+    ACK: 1
+    Data: 
+}
+----------------------------------------------------------------------------------------------------------------
+tc10 - Server (0.625)
+
+Inputs:
+
+packet* p = new packet();
+strcpy(p->data, "message 6\0");
+p->version = 1;
+p->headerLength = 5;
+p->totalLength = 7 + strlen(p->data);
+p->srcDept = 2;
+p->destDept = 0;
+p->checkSum = 0;
+p->hops = 0;
+p->type = 0;
+p->ACK = 1;
+int pilani_dept[] = {1, 2, 3, 4};
+int goa_dept[] = {1, 2};
+int hyd_dept[] = {2, 3, 4, 5, 6}; 
+int* validDept[] = {pilani_dept, goa_dept, hyd_dept};
+int numDept[] = {4, 2, 5};
+
+int priv = 21020;
+
+Output packets:
+1) packet1
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 16
+    Source Department: 2
+    Destination Department: 0
+    CheckSum: 0
+    Hops: 1
+    Type: 0
+    ACK: 1
+    Data: message 6
+}
+2) packet2
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 7
+    Source Department: 0
+    Destination Department: 2
+    CheckSum: 0
+    Hops: 0
+    Type: 0
+    ACK: 1
+    Data: 
+}
+----------------------------------------------------------------------------------------------------------------
+tc11 - Server (0.625)
+
+Inputs:
+
+packet* p = new packet();
+strcpy(p->data, "message 7\0");
+p->version = 1;
+p->headerLength = 6;
+p->totalLength = 8 + strlen(p->data);
+p->srcDept = 3;
+p->destDept = 2;
+p->checkSum = 0;
+p->hops = 0;
+p->type = 0;
+p->ACK = 1;
+p->srcCampus = 0;
+p->destCampus = 2;
+
+int pilani_dept[] = {1, 2, 3, 4};
+int goa_dept[] = {1, 2};
+int hyd_dept[] = {2, 3, 4, 5, 6}; 
+int* validDept[] = {pilani_dept, goa_dept, hyd_dept};
+int numDept[] = {4, 2, 5};
+
+int priv = 21020;
+
+Output packets:
+1) packet1 = NULL
+2) packet2
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 26
+    Source Department: 0
+    Destination Department: 3
+    CheckSum: 0
+    Hops: 0
+    Type: 0
+    ACK: 0
+    Data: PERMISSION DENIED 1
+}
+----------------------------------------------------------------------------------------------------------------
+tc12 - Server (0.625)
+
+Inputs:
+
+packet* p = new packet();
+strcpy(p->data, "message 8\0");
+p->version = 1;
+p->headerLength = 5;
+p->totalLength = 7 + strlen(p->data);
+p->srcDept = 3;
+p->destDept = 4;
+p->checkSum = 0;
+p->hops = 0;
+p->type = 0;
+p->ACK = 1;
+
+int pilani_dept[] = {1, 2, 3, 4};
+int goa_dept[] = {1, 2};
+int hyd_dept[] = {2, 3, 4, 5, 6}; 
+int* validDept[] = {pilani_dept, goa_dept, hyd_dept};
+int numDept[] = {4, 2, 5};
+
+int priv = 21020;
+
+Output packets:
+1) packet1
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 16
+    Source Department: 3
+    Destination Department: 4
+    CheckSum: 0
+    Hops: 1
+    Type: 0
+    ACK: 1
+    Data: message 8
+}
+2) packet2
+{
+    Version: 1
+    Header Length: 5
+    Total Length: 7
+    Source Department: 0
+    Destination Department: 3
+    CheckSum: 0
+    Hops: 0
+    Type: 0
+    ACK: 1
+    Data: 
+}
+----------------------------------------------------------------------------------------------------------------
